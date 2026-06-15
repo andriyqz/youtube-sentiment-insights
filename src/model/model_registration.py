@@ -10,7 +10,7 @@ logger.setLevel('DEBUG')
 console_handler = logging.StreamHandler()
 console_handler.setLevel('DEBUG')
 
-file_handler = logging.FileHandler('model_registration_errors.log')
+file_handler = logging.FileHandler('logs/model_registration_errors.log')
 file_handler.setLevel('ERROR')
 
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -56,7 +56,7 @@ def register_model(model_name: str, model_info: dict):
 
 def main():
     try:
-        model_info_path = 'experiment_info.json'
+        model_info_path = 'reports/experiment_info.json'
         model_info = load_model_info(model_info_path)
         
         model_name = 'my_model'

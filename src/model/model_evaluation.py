@@ -22,7 +22,7 @@ logger.setLevel('DEBUG')
 console_handler = logging.StreamHandler()
 console_handler.setLevel('DEBUG')
 
-file_handler = logging.FileHandler('model_evaluation_errors.log')
+file_handler = logging.FileHandler('logs/model_evaluation_errors.log')
 file_handler.setLevel('ERROR')
 
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -99,7 +99,7 @@ def log_confusion_matrix(cm, dataset_name):
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
 
-    cm_file_path = f'confusion_matrix_{dataset_name}.png'
+    cm_file_path = f'reports/confusion_matrix_{dataset_name}.png'
     plt.savefig(cm_file_path)
 
     mlflow.log_artifact(cm_file_path)
@@ -132,8 +132,8 @@ def main() -> None:
             for key, value in params.items():
                 mlflow.log_param(key, value)
 
-            model = load_model(os.path.join(root_dir, 'lgbm_model.pkl'))
-            vectorizer = load_vectorizer(os.path.join(root_dir, 'tfidf_vectorizer.pkl'))
+            model = load_model(os.path.join(root_dir, 'models/lgbm_model.pkl'))
+            vectorizer = load_vectorizer(os.path.join(root_dir, 'models/tfidf_vectorizer.pkl'))
 
             test_data = load_data(os.path.join(root_dir, 'data/interim/test_processed.csv'))
 
@@ -151,9 +151,9 @@ def main() -> None:
             )
 
             model_path = 'lgbm_model'
-            save_model_info(run.info.run_id, model_path, 'experiment_info.json')
+            save_model_info(run.info.run_id, model_path, 'reports/experiment_info.json')
 
-            mlflow.log_artifact(os.path.join(root_dir, 'tfidf_vectorizer.pkl'))
+            mlflow.log_artifact(os.path.join(root_dir, 'models/tfidf_vectorizer.pkl'))
 
             report, cm = evaluate_model(model, X_test_tfidf, y_test)
 

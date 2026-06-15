@@ -16,7 +16,7 @@ logger.setLevel('DEBUG')
 console_handler = logging.StreamHandler()
 console_handler.setLevel('DEBUG')
 
-file_handler = logging.FileHandler('model_building_errors.log')
+file_handler = logging.FileHandler('logs/model_building_errors.log')
 file_handler.setLevel('ERROR')
 
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -72,7 +72,7 @@ def apply_tfidf(train_data: pd.DataFrame, max_features: int, ngram_range: tuple)
 
         logger.debug(f"TF-IDF transformation complete. Train shape: {X_train_tfidf.shape}")
 
-        with open(os.path.join(get_root_directory(), 'tfidf_vectorizer.pkl'), 'wb') as f:
+        with open(os.path.join(get_root_directory(), 'models/tfidf_vectorizer.pkl'), 'wb') as f:
             pickle.dump(vectorizer, f)
 
         logger.debug('TF-IDF applied with trigrams and data transformed')
@@ -136,7 +136,7 @@ def main():
 
         best_model = train_lgbm(X_train_tfidf, y_train, learning_rate, max_depth, n_estimators)
 
-        save_model(best_model, os.path.join(root_dir, 'lgbm_model.pkl'))
+        save_model(best_model, os.path.join(root_dir, 'models/lgbm_model.pkl'))
 
     except Exception as e:
         logger.error('Failed to complete the feature engineering and model building process: %s', e)
